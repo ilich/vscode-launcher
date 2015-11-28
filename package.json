@@ -1,8 +1,17 @@
 {
 	"name": "launcher",
+    "displayName": "Launcher",
 	"description": "Scripts and tools shortcuts manager for Visual Studio Code",
 	"version": "0.0.1",
 	"publisher": "ilich8086",
+    "homepage": "https://github.com/ilich/vscode-launcher",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ilich/vscode-launcher.git"
+    },
+    "bugs": {
+        "url": "https://github.com/ilich/vscode-launcher/issues"
+    },
 	"engines": {
 		"vscode": "^0.10.1"
 	},
@@ -10,14 +19,84 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.sayHello"
+		"onCommand:launcher.terminal",
+		"onCommand:launcher.terminalInWorkspace",
+		"onCommand:launcher",
+		"onCommand:launcher.workspace"
 	],
 	"main": "./out/src/extension",
 	"contributes": {
-		"commands": [{
-			"command": "extension.sayHello",
-			"title": "Hello World"
-		}]
+		"commands": [
+			{
+				"command": "launcher.terminal",
+				"title": "Open a terminal"
+			},
+			{
+				"command": "launcher.terminalInWorkspace",
+				"title": "Open a terminal in the workspace folder"
+			},
+			{
+				"command": "launcher",
+				"title": "Launcher"
+			},
+			{
+				"command": "launcher.workspace",
+				"title": "Configure Launcher (workspace settings)"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "launcher.terminal",
+				"key": "ctrl+shift+t"
+			},
+			{
+				"command": "launcher.terminalInWorkspace",
+				"key": "ctrl+alt+shift+t"
+			},
+			{
+				"command": "launcher",
+				"key": "shift+f2"
+			}
+		],
+        "configuration": {
+            "title": "Launcher Configuration",
+            "type": "object",
+            "properties": {
+                "launcher.terminal": {
+                    "type": "string",
+                    "description": "Command to launch terminal. Empty value means using default system terminal."
+                },
+                "launcher.commands": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "description": {
+                                "type": "string",
+                                "description": "Command description (shown in the Script Manager)"
+                            },
+                            "executable": {
+                                "type": "string",
+                                "description": "Command executable"
+                            },
+                            "parameters": {
+                                "type": "string",
+                                "description": "Command executable's parameters (use %item% or %workspace% to reference VS Code folders)"
+                            },
+                            "startIn": {
+                                "type": "string",
+                                "description": "Start executable in the folder (use %item% or %workspace% to reference VS Code folders)"
+                            } 
+                        }
+                    },
+                    "required": [
+                        "description",
+                        "executable"
+                    ],
+                    "description": "User commands (shared between workspaces)"
+                }
+            }
+        }
 	},
 	"scripts": {
 		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
