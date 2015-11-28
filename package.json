@@ -21,8 +21,7 @@
 	"activationEvents": [
 		"onCommand:launcher.terminal",
 		"onCommand:launcher.terminalInWorkspace",
-		"onCommand:launcher",
-		"onCommand:launcher.workspace"
+		"onCommand:launcher"
 	],
 	"main": "./out/src/extension",
 	"contributes": {
@@ -38,10 +37,6 @@
 			{
 				"command": "launcher",
 				"title": "Launcher"
-			},
-			{
-				"command": "launcher.workspace",
-				"title": "Configure Launcher (workspace settings)"
 			}
 		],
 		"keybindings": [
@@ -63,7 +58,20 @@
             "type": "object",
             "properties": {
                 "launcher.terminal": {
-                    "type": "string",
+                    "type": "object",
+                    "properties": {
+                        "executable": {
+                            "type": "string",
+                            "description": "Command executable"
+                        },
+                        "parameters": {
+                            "type": "string",
+                            "description": "Command executable's parameters (use %item% or %workspace% to reference VS Code folders)"
+                        }
+                    },
+                    "required": [
+                        "executable"
+                    ],
                     "description": "Command to launch terminal. Empty value means using default system terminal."
                 },
                 "launcher.commands": {
