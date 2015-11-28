@@ -5,34 +5,34 @@ import cp = require("child_process");
 import vscode = require("vscode");
 
 export class Launcher {
-	private _workspacePath: string = null;
-	private _activeItemPath: string = null;
+    private _workspacePath: string = null;
+    private _activeItemPath: string = null;
     private _commands: Array<ICommand> = [];
     private _startTerminal: ICommand = null;
 
-	constructor(textEditor: vscode.TextEditor = null) {
-		this._workspacePath = vscode.workspace.rootPath;
-		if (textEditor !== null) {
-			this._activeItemPath = path.dirname(textEditor.document.fileName);
+    constructor(textEditor: vscode.TextEditor = null) {
+        this._workspacePath = vscode.workspace.rootPath;
+        if (textEditor !== null) {
+            this._activeItemPath = path.dirname(textEditor.document.fileName);
             if (this._activeItemPath === ".") {
                 this._activeItemPath = null;
             }
-		}
+        }
 
         this.initCommands();
-	}
+    }
 
-	public runTerminalInItemFolder() {
-		if (this._startTerminal !== null) {
+    public runTerminalInItemFolder() {
+        if (this._startTerminal !== null) {
             this._startTerminal.run(this._activeItemPath);
         }
-	}
+    }
 
-    public runTerminalInWorkspaceFolder () {
-		if (this._startTerminal !== null) {
+    public runTerminalInWorkspaceFolder() {
+        if (this._startTerminal !== null) {
             this._startTerminal.run(this._workspacePath);
         }
-	}
+    }
 
     public configure() {
         vscode.window.showInformationMessage("Local Setup");
@@ -42,14 +42,14 @@ export class Launcher {
         // TODO
 
         var items = [
-			"Command 1",
-			"Command 2",
-			"Command 3"
-		];
+            "Command 1",
+            "Command 2",
+            "Command 3"
+        ];
 
-		vscode.window.showQuickPick(items).then((value: string) => {
-			vscode.window.showInformationMessage(value);
-		});
+        vscode.window.showQuickPick(items).then((value: string) => {
+            vscode.window.showInformationMessage(value);
+        });
     }
 
     protected initCommands() {
@@ -72,7 +72,7 @@ class Command implements ICommand {
     private _parameters: string;
     private _description: string;
     private _workspacePath: string;
-	private _activeItemPath: string ;
+    private _activeItemPath: string;
 
     constructor(description: string,
                 executable: string,
