@@ -20,6 +20,10 @@ export class Command implements ICommand {
         this._description = description;
         this._executable = executable;
         this._parameters = parameters;
+        if (typeof this._parameters !== "string") {
+            this._parameters = "";
+        }
+
         this._state = state;
     }
 

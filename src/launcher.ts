@@ -7,7 +7,7 @@ import cfg = require("./configuration");
 
 export class Launcher {
     private _state: cfg.LauncherState = null;
-    private _commands: Array<cmd.ICommand> = [];
+    private _commands: { [id: string]: IMenuItem } = null;
     private _startTerminal: cmd.ICommand = null;
 
     constructor(textEditor: vscode.TextEditor = null) {
@@ -28,25 +28,40 @@ export class Launcher {
     }
 
     public runScriptsManager() {
-        // TODO
+        var menu: Array<string> = [];
+        for (let command in this._commands) {
+            menu.push(command);
+        }
 
-        var items = [
-            "Command 1",
-            "Command 2",
-            "Command 3"
-        ];
+        vscode.window.showQuickPick(menu).then((value: string) => {
+            let item = this._commands[value];
+            if (!item) {
+                return;
+            }
 
-        vscode.window.showQuickPick(items).then((value: string) => {
-            vscode.window.showInformationMessage(value);
+            item.command.run(item.startIn);
         });
     }
 
     protected initCommands() {
-        this._commands = [];
+        this._commands = {};
 
-        // TODO Load commands from the configuration
+        // Load commands from the configuration
+        let config = vscode.workspace.getConfiguration("launcher");
+        let commands = config.get<Array<cfg.ICommandConfiguration>>("commands", []);
+        commands.forEach((cfg: cfg.ICommandConfiguration) => {
+            this._commands[cfg.description] = {
+                command: new cmd.Command(cfg.description, cfg.executable, cfg.parameters, this._state),
+                startIn: cfg.startIn
+            };
+        });
 
         // Load terminal command
         this._startTerminal = new cmd.TerminalCommand(this._state);
     }
+}
+
+interface IMenuItem {
+    command: cmd.ICommand;
+    startIn: string;
 }
