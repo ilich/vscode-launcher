@@ -4,38 +4,60 @@ import path = require("path");
 import cp = require("child_process");
 import vscode = require("vscode");
 
-export class Launcher {
+interface ICommand {
+    description: string;
+    run(startIn: string): void;
+}
+
+class LauncherState {
     private _workspacePath: string = null;
     private _activeItemPath: string = null;
-    private _commands: Array<ICommand> = [];
-    private _startTerminal: ICommand = null;
+    private _activeItem: string = null;
 
     constructor(textEditor: vscode.TextEditor = null) {
         this._workspacePath = vscode.workspace.rootPath;
         if (textEditor !== null) {
-            this._activeItemPath = path.dirname(textEditor.document.fileName);
+            this._activeItem = textEditor.document.fileName;
+            this._activeItemPath = path.dirname(this._activeItem);
             if (this._activeItemPath === ".") {
                 this._activeItemPath = null;
             }
         }
+    }
 
+    get workspacePath(): string {
+        return this._workspacePath;
+    }
+
+    get activeItem(): string {
+        return this._activeItem;
+    }
+
+    get activeItemPath(): string {
+        return this._activeItemPath;
+    }
+}
+
+export class Launcher {
+    private _state: LauncherState = null;
+    private _commands: Array<ICommand> = [];
+    private _startTerminal: ICommand = null;
+
+    constructor(textEditor: vscode.TextEditor = null) {
+        this._state = new LauncherState(textEditor);
         this.initCommands();
     }
 
     public runTerminalInItemFolder() {
         if (this._startTerminal !== null) {
-            this._startTerminal.run(this._activeItemPath);
+            this._startTerminal.run(this._state.activeItemPath);
         }
     }
 
     public runTerminalInWorkspaceFolder() {
         if (this._startTerminal !== null) {
-            this._startTerminal.run(this._workspacePath);
+            this._startTerminal.run(this._state.workspacePath);
         }
-    }
-
-    public configure() {
-        vscode.window.showInformationMessage("Local Setup");
     }
 
     public runScriptsManager() {
@@ -58,32 +80,24 @@ export class Launcher {
         // TODO Load commands from the configuration
 
         // Load terminal command
-        this._startTerminal = new TerminalCommand(this._workspacePath, this._activeItemPath);
+        this._startTerminal = new TerminalCommand(this._state);
     }
-}
-
-interface ICommand {
-    description: string;
-    run(startIn: string): void;
 }
 
 class Command implements ICommand {
     private _executable: string;
     private _parameters: string;
     private _description: string;
-    private _workspacePath: string;
-    private _activeItemPath: string;
+    private _state: LauncherState;
 
     constructor(description: string,
                 executable: string,
                 parameters: string,
-                workspacePath: string,
-                activeItemPath: string) {
+                state: LauncherState) {
         this._description = description;
         this._executable = executable;
         this._parameters = parameters;
-        this._workspacePath = workspacePath === null ? "" : workspacePath;
-        this._activeItemPath = activeItemPath === null ? "" : activeItemPath;
+        this._state = state;
     }
 
     get description(): string {
@@ -108,15 +122,15 @@ class Command implements ICommand {
             return str;
         }
 
-        str = str.replace(/%item%/ig, this._activeItemPath);
-        str = str.replace(/%workspace%/ig, this._workspacePath);
+        str = str.replace(/%item%/ig, this._state.activeItem);
+        str = str.replace(/%item_path%/ig, this._state.activeItemPath);
+        str = str.replace(/%workspace%/ig, this._state.workspacePath);
         return str;
     }
 }
 
 class TerminalCommand extends Command {
-    constructor(workspacePath: string,
-                activeItemPath: string) {
+    constructor(state: LauncherState) {
         let config = vscode.workspace.getConfiguration("launcher.terminal");
         let executable = config.get<string>("executable", "");
         let parameters = config.get<string>("parameters", "");
@@ -137,6 +151,6 @@ class TerminalCommand extends Command {
             }
         }
 
-        super("Terminal", executable, parameters, workspacePath, activeItemPath);
+        super("Terminal", executable, parameters, state);
     }
 }

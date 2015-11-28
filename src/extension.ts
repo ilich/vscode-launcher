@@ -20,13 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
         tools.runScriptsManager();
     });
 
-    var configure = vscode.commands.registerCommand("launcher.workspace", () => {
-        var tools = new launcher.Launcher(vscode.window.activeTextEditor);
-        tools.configure();
-    });
-
     context.subscriptions.push(runTerminalInItemFolder);
     context.subscriptions.push(runTerminalInWorkspaceFolder);
     context.subscriptions.push(runScriptsManager);
-    context.subscriptions.push(configure);
 }

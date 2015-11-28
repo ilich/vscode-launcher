@@ -89,11 +89,11 @@
                             },
                             "parameters": {
                                 "type": "string",
-                                "description": "Command executable's parameters (use %item% or %workspace% to reference VS Code folders)"
+                                "description": "Command executable's parameters (use %item%, %item_path% or %workspace% to reference VS Code folders)"
                             },
                             "startIn": {
                                 "type": "string",
-                                "description": "Start executable in the folder (use %item% or %workspace% to reference VS Code folders)"
+                                "description": "Start executable in the folder (use %item%, %item_path% or %workspace% to reference VS Code folders)"
                             } 
                         }
                     },
