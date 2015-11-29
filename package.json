@@ -1,7 +1,7 @@
 {
 	"name": "launcher",
     "displayName": "Launcher",
-	"description": "Scripts and tools shortcuts manager for Visual Studio Code",
+	"description": "An easy way to launch your terminal, tools, scripts and batches from Visual Studio Code.",
 	"version": "0.0.1",
 	"publisher": "ilich8086",
     "homepage": "https://github.com/ilich/vscode-launcher",
@@ -28,11 +28,11 @@
 		"commands": [
 			{
 				"command": "launcher.terminal",
-				"title": "Open a terminal"
+				"title": "Open a Terminal"
 			},
 			{
 				"command": "launcher.terminalInWorkspace",
-				"title": "Open a terminal in the workspace folder"
+				"title": "Open a Terminal (Workspace Folder)"
 			},
 			{
 				"command": "launcher",
