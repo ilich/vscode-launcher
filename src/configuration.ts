@@ -6,6 +6,7 @@ export interface ICommandConfiguration {
     executable: string;
     parameters?: string;
     startIn?: string;
+    shouldOutput?: boolean;
 }
 
 export class LauncherState {

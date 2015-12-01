@@ -12,14 +12,17 @@ export class Command implements ICommand {
     private _parameters: string;
     private _description: string;
     private _state: cfg.LauncherState;
-
+    private _output: boolean;
+    
     constructor(description: string,
                 executable: string,
                 parameters: string,
+                output: boolean,
                 state: cfg.LauncherState) {
         this._description = description;
         this._executable = executable;
         this._parameters = parameters;
+        this._output = output;
         if (typeof this._parameters !== "string") {
             this._parameters = "";
         }
@@ -41,7 +44,30 @@ export class Command implements ICommand {
             options.cwd = startIn;
         }
 
-        cp.exec(command, options);
+        let shouldOutput = this._output;
+        
+        cp.exec(command, options, 
+            function(error: Error, stdout: Buffer, stderr: Buffer)
+            {
+                if (shouldOutput)
+                {
+                    let output: string = "";
+                    
+                    if (error != null)
+                    {
+                        output = error.message;
+                    }   
+                    else 
+                    {
+                        output = stdout.toString();
+                        output += stderr.toString();
+                    }
+                    
+                    let outputChannel = vscode.window.createOutputChannel("Command Output");
+                    outputChannel.append(output);
+                    outputChannel.show();
+                }
+            });
     }
 
     protected applyTemplate(str: string) {

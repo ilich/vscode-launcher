@@ -51,7 +51,7 @@ export class Launcher {
         let commands = config.get<Array<cfg.ICommandConfiguration>>("commands", []);
         commands.forEach((cfg: cfg.ICommandConfiguration) => {
             this._commands[cfg.description] = {
-                command: new cmd.Command(cfg.description, cfg.executable, cfg.parameters, this._state),
+                command: new cmd.Command(cfg.description, cfg.executable, cfg.parameters, cfg.output, this._state),
                 startIn: cfg.startIn
             };
         });
