@@ -2,7 +2,7 @@
 	"name": "launcher",
     "displayName": "Launcher",
 	"description": "An easy way to launch your terminal, tools, scripts and batches from Visual Studio Code.",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"publisher": "ilich8086",
     "homepage": "https://github.com/ilich/vscode-launcher",
     "repository": {
@@ -94,7 +94,11 @@
                             "startIn": {
                                 "type": "string",
                                 "description": "Start executable in the folder (use %item%, %item_path% or %workspace% to reference VS Code folders)"
-                            } 
+                            },
+                            "output": {
+                                "type": "boolean",
+                                "description": "Send comman's stdout and stderr to output channel if the value is true"
+                            }
                         }
                     },
                     "required": [

@@ -64,6 +64,13 @@ An easy way to launch your terminal, tools, scripts and batches from Visual Stud
     {
         "description": "Calculator",
         "executable": "calc.exe"
+    },
+    {
+        "description": "List files in Workspace folder",
+        "executable": "cmd.exe",
+        "parameters": "/c dir",
+        "startIn": "%workspace%",
+        "output": true
     }
 ]
 ```
@@ -75,6 +82,8 @@ An easy way to launch your terminal, tools, scripts and batches from Visual Stud
 **launcher.commands.parameters** (string) - Command line parameters.
 
 **launcher.commands.startIn** (string) - Program starts in the directory set in the setting.
+
+**launcher.commands.output** (boolean) - Send comman's stdout and stderr to Visual Studio Code's output channel if the value is true.
 
 ### Run a script or a tool from the bookmarks
 

@@ -13,7 +13,7 @@ export class Command implements ICommand {
     private _description: string;
     private _state: cfg.LauncherState;
     private _output: boolean;
-    
+
     constructor(description: string,
                 executable: string,
                 parameters: string,
@@ -44,30 +44,29 @@ export class Command implements ICommand {
             options.cwd = startIn;
         }
 
-        let shouldOutput = this._output;
-        
-        cp.exec(command, options, 
-            function(error: Error, stdout: Buffer, stderr: Buffer)
-            {
-                if (shouldOutput)
-                {
-                    let output: string = "";
-                    
+        cp.exec(command,
+                options,
+                (error: Error, stdout: Buffer, stderr: Buffer) => {
+                    if (!this._output) {
+                        return;
+                    }
+
+                    let output: string;
+
                     if (error != null)
                     {
                         output = error.message;
-                    }   
-                    else 
+                    }
+                    else
                     {
                         output = stdout.toString();
                         output += stderr.toString();
                     }
-                    
-                    let outputChannel = vscode.window.createOutputChannel("Command Output");
+
+                    let outputChannel = vscode.window.createOutputChannel("Launcher: Command Output");
                     outputChannel.append(output);
                     outputChannel.show();
-                }
-            });
+                });
     }
 
     protected applyTemplate(str: string) {
@@ -104,6 +103,6 @@ export class TerminalCommand extends Command {
             }
         }
 
-        super("Terminal", executable, parameters, state);
+        super("Terminal", executable, parameters, false, state);
     }
 }
