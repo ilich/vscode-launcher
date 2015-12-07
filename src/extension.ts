@@ -5,8 +5,8 @@ import launcher = require("./launcher");
 
 export function activate(context: vscode.ExtensionContext) {
 
-    var runTerminalInItemFolder = vscode.commands.registerTextEditorCommand("launcher.terminal", (textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) => {
-        var tools = new launcher.Launcher(textEditor);
+    var runTerminalInItemFolder = vscode.commands.registerCommand("launcher.terminal", () => {
+        var tools = new launcher.Launcher(vscode.window.activeTextEditor);
         tools.runTerminalInItemFolder();
     });
 

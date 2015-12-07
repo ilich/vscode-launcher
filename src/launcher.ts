@@ -17,7 +17,13 @@ export class Launcher {
 
     public runTerminalInItemFolder() {
         if (this._startTerminal !== null) {
-            this._startTerminal.run(this._state.activeItemPath);
+            var targetFolder = this._state.activeItemPath;
+            if (!targetFolder) {
+                targetFolder = this._state.workspacePath;
+            }
+
+            // Launch Terminal in workspace folder if there isn't an open file
+            this._startTerminal.run(targetFolder);
         }
     }
 
