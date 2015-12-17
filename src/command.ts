@@ -37,7 +37,7 @@ export class Command implements ICommand {
     run(startIn: string): void {
         let parameters = this.applyTemplate(this._parameters);
         startIn = this.applyTemplate(startIn);
-        let command = this._executable + " " + parameters;
+        let command = "\"" + this._executable + "\" " + parameters;
 
         let options: any = {};
         if (startIn) {
