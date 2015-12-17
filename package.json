@@ -2,7 +2,7 @@
 	"name": "launcher",
     "displayName": "Launcher",
 	"description": "An easy way to launch your terminal, tools, scripts and batches from Visual Studio Code.",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"publisher": "ilich8086",
     "homepage": "https://github.com/ilich/vscode-launcher",
     "repository": {
