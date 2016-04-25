@@ -62,7 +62,8 @@
                     "properties": {
                         "executable": {
                             "type": "string",
-                            "description": "Command executable"
+                            "description": "Command executable",
+                            "default": ""
                         },
                         "parameters": {
                             "type": "string",
@@ -72,6 +73,9 @@
                     "required": [
                         "executable"
                     ],
+                    "default": {
+                        "executable": ""
+                    },
                     "description": "Command to launch terminal. Empty value means using default system terminal."
                 },
                 "launcher.commands": {
